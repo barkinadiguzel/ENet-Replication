@@ -8,16 +8,16 @@ class ENet(nn.Module):
     def __init__(self, num_classes):
         super().__init__()
 
-        # ---------------- INITIAL ----------------
+        # INITIAL
         self.initial = InitialBlock()
 
-        # ---------------- STAGE 1 ----------------
+        # STAGE 1 
         self.stage1_0 = Bottleneck(16, 64, downsample=True)
         self.stage1 = nn.Sequential(
             *[Bottleneck(64, 64) for _ in range(4)]
         )
 
-        # ---------------- STAGE 2 ----------------
+        # STAGE 2 
         self.stage2_0 = Bottleneck(64, 128, downsample=True)
 
         self.stage2 = nn.Sequential(
@@ -31,7 +31,7 @@ class ENet(nn.Module):
             Bottleneck(128, 128, dilated=16),
         )
 
-        # ---------------- STAGE 3 ----------------
+        # STAGE 3 
         self.stage3 = nn.Sequential(
             Bottleneck(128, 128),
             Bottleneck(128, 128, dilated=2),
@@ -43,20 +43,20 @@ class ENet(nn.Module):
             Bottleneck(128, 128, dilated=16),
         )
 
-        # ---------------- STAGE 4 ----------------
+        # STAGE 4 
         self.stage4 = nn.Sequential(
             Bottleneck(128, 64),
             Bottleneck(64, 64),
             Bottleneck(64, 64),
         )
 
-        # ---------------- STAGE 5 ----------------
+        # STAGE 5 
         self.stage5 = nn.Sequential(
             Bottleneck(64, 16),
             Bottleneck(16, 16),
         )
 
-        # ---------------- CLASSIFIER ----------------
+        # CLASSIFIER 
         self.classifier = nn.Conv2d(16, num_classes, 1)
 
     def forward(self, x):
